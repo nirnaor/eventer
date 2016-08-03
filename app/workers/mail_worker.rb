@@ -1,3 +1,4 @@
+# Used to send mail to users that exist in the database.
 class MailWorker
   @queue = :mail
   def self.perform(emails, content)
