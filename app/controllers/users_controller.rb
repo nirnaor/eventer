@@ -5,9 +5,7 @@ class UsersController < ApplicationController
   end
 
   def send_mail
-    emails, content = JSON.parse(params[:emails]), params[:content]
-    existing_emails = User.where(email: emails).pluck(:email)
-    UserNotifierMailer.send_signup_email(existing_emails, content).deliver
+    Resque.enqueue(MailWorker, JSON.parse(params[:emails]), params[:content])
     render json: {users: 5}.to_json
   end
 end
