@@ -1,24 +1,25 @@
-# README
+# Eventer
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Eventer is a simple API that is used to send emails to users.
 
-Things you may want to cover:
+# Instalation
+#### Redis
+Run `brew install redis` and follow the instructions.
 
-* Ruby version
+#### Sendgrid
+Configure your username password and domain:
+```
+export SENDGRID_USER="username"
+export SENDGRID_PASSWORD="password"
+export SENDGRID_DOMAIN="localhost"
+```
 
-* System dependencies
 
-* Configuration
+Next, run the queues using
+`bash scripts/run_queues.sh`
 
-* Database creation
+# General explanation
+I use two queues (using [resque](https://github.com/resque/resque)) to process stuff in the background. When adding emails I'm adding the emails to the DB queue and when sending mails I add them to the mails queue. Each queue is later processed by it's own worker.
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+#### Exception handling
+The workers are adding messages back to queue before raising exceptions.
